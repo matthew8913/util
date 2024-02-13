@@ -55,9 +55,9 @@ public class Utility {
     /**
      * Конструктор.
      */
-    public Utility(){
+    public Utility() {
         System.setOut(new PrintStream(System.out));
-        statisticsType = Command.S;
+        statisticsType = null;
         prefix = "";
         appendingMode = false;
         savingPath = new File(System.getProperty("user.dir"));
@@ -71,7 +71,7 @@ public class Utility {
     /**
      * Метод запуска программы.
      */
-    public void run(){
+    public void run() {
         input();
         this.scanner.close();
         executeCommand();
@@ -111,6 +111,7 @@ public class Utility {
 
     /**
      * Метод, конфигурирующий программу по пользовательскому вводу.
+     *
      * @param input Список строк(входная строка, разделенная пробелами).
      */
     public void setInput(List<String> input) {
@@ -118,18 +119,18 @@ public class Utility {
 
         //Проверка каждой команды
         boolean commandIsValid = true;
-        while(commandIsValid){
-           try{
-               commandIsValid = setCommands(inputIterator);
-           }catch(CommandException e){
-               handleCommandException(e);
-           }
+        while (commandIsValid) {
+            try {
+                commandIsValid = setCommands(inputIterator);
+            } catch (CommandException e) {
+                handleCommandException(e);
+            }
         }
 
         //Проверка каждого исходного файла
         boolean sourceFileIsValid = true;
-        while(sourceFileIsValid){
-            try{
+        while (sourceFileIsValid) {
+            try {
                 sourceFileIsValid = setFileSources(inputIterator);
             } catch (CommandException e) {
                 handleCommandException(e);
@@ -137,9 +138,9 @@ public class Utility {
         }
 
         //Проверка наличия исходников в команде
-        try{
+        try {
             checkFiles();
-        }catch (CommandException e){
+        } catch (CommandException e) {
             handleCommandException(e);
         }
 
@@ -147,15 +148,16 @@ public class Utility {
 
     /**
      * Метод, проверяющий отдельно взятую команду.
+     *
      * @param iterator Итератор используемый для просмотра строк в команде.
      * @return Корректность отдельно взятой команды.
      * @throws CommandException Если допущена ошибка в веденной команде.
      */
-    public boolean setCommands(ListIterator<String> iterator) throws CommandException{
-        if(iterator.hasNext()){
+    public boolean setCommands(ListIterator<String> iterator) throws CommandException {
+        if (iterator.hasNext()) {
             String s = iterator.next();
             Command command = Command.fromString(s);
-            if(command!=null){
+            if (command != null) {
                 switch (command) {
                     case S, F -> {
                         statisticsType = command;
@@ -186,12 +188,12 @@ public class Utility {
                         return true;
                     }
                 }
-            }else{
+            } else {
                 //команды закончились
                 iterator.previous();
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
 
@@ -200,30 +202,32 @@ public class Utility {
 
     /**
      * Метод, проверяющий корректность пути файла из последовательности в команде.
+     *
      * @param iterator Итератор используемый для просмотра строк в команде.
      * @return Корректен/не корректен путь.
      * @throws CommandException Если файл некорректен.
      */
     public boolean setFileSources(ListIterator<String> iterator) throws CommandException {
-        if(iterator.hasNext()){
+        if (iterator.hasNext()) {
             String path = iterator.next();
             if (checkFile(path)) {
                 fileSources.add(new File(path));
                 return true;
-            }else{
-                throw new CommandException(ErrorCode.SINGLE_SOURCE_FILE_NOT_FOUND,path);
+            } else {
+                throw new CommandException(ErrorCode.SINGLE_SOURCE_FILE_NOT_FOUND, path);
             }
-        }else{
+        } else {
             return false;
         }
     }
 
     /**
      * Метод проверки наличия исходных файлов.
+     *
      * @throws CommandException Если файлов не обнаружено.
      */
     public void checkFiles() throws CommandException {
-        if(fileSources.isEmpty()){
+        if (fileSources.isEmpty()) {
             throw new CommandException(ErrorCode.SOURCE_FILES_NOT_FOUND);
         }
     }
@@ -231,29 +235,30 @@ public class Utility {
 
     /**
      * Обработчик исключительных ситуаций пользовательского ввода.
+     *
      * @param e Исключение.
      */
-    public void handleCommandException(CommandException e){
+    public void handleCommandException(CommandException e) {
         ErrorCode error = e.getErrorCode();
         switch (error) {
             case SAVE_PATH_NOT_EXIST -> {
                 System.out.println(e.getMessage());
-                if(askForCommandCorrection()){
+                if (askForCommandCorrection()) {
                     correctSavingPath();
                 }
             }
             case SOURCE_FILES_NOT_FOUND -> {
                 System.out.println(e.getMessage());
                 System.out.println("If you decide not to enter the file paths, the program will stop.");
-                if(askForCommandCorrection()){
+                if (askForCommandCorrection()) {
                     correctFileSources();
-                }else{
+                } else {
                     System.exit(0);
                 }
             }
             case SINGLE_SOURCE_FILE_NOT_FOUND -> {
                 System.out.println(e.getMessage());
-                if(askForCommandCorrection()){
+                if (askForCommandCorrection()) {
                     correctSingleSourceFile();
                 }
             }
@@ -262,17 +267,18 @@ public class Utility {
 
     /**
      * Метод, спрашивающий у пользователя, будет ли он корректировать значение.
+     *
      * @return Будет/не будет.
      */
     public boolean askForCommandCorrection() {
         System.out.println("To correct press 1\n" +
                 "To skip press 0");
         String s = this.scanner.nextLine();
-        if(s.equals("0")){
+        if (s.equals("0")) {
             return false;
-        } else if (s.equals("1")){
+        } else if (s.equals("1")) {
             return true;
-        }else{
+        } else {
             System.out.println("Enter the correct value: ");
             return askForCommandCorrection();
         }
@@ -281,20 +287,22 @@ public class Utility {
 
     /**
      * Метод, проверяющий существования файла по строке.
+     *
      * @param path Строка содержащая путь к файлу.
      * @return Существует ли такой файл.
      */
-    public boolean checkFile(String path){
+    public boolean checkFile(String path) {
         File file = new File(path);
         return file.exists() && !file.isDirectory();
     }
 
     /**
      * Метод, проверяющий существования директории по строке.
+     *
      * @param path Строка содержащая путь.
      * @return Существует ли такая директория.
      */
-    public boolean checkDirectory(String path){
+    public boolean checkDirectory(String path) {
         File file = new File(path);
         return file.exists() && file.isDirectory();
 
@@ -303,12 +311,12 @@ public class Utility {
     /**
      * Метод для корректировки пути сохранения. Использует ввод с консоли. Валидация присутствует.
      */
-    public void correctSavingPath(){
+    public void correctSavingPath() {
         String path;
         do {
             System.out.println("Enter the correct path or press enter(default path): ");
             path = this.scanner.nextLine();
-            if(path.equals("")) return;
+            if (path.equals("")) return;
         } while (!checkDirectory(path));
         savingPath = new File(path);
     }
@@ -316,31 +324,31 @@ public class Utility {
     /**
      * Метод, добавляющий один файл в список исходников. Использует ввод с консоли. Валидация присутствует.
      */
-    public void correctSingleSourceFile(){
+    public void correctSingleSourceFile() {
         String path;
         do {
             System.out.println("Enter the correct path or skip(enter):");
             path = this.scanner.nextLine();
-        } while (!checkFile(path)&&!path.isEmpty());
-        if(!path.isEmpty()) fileSources.add(new File(path));
+        } while (!checkFile(path) && !path.isEmpty());
+        if (!path.isEmpty()) fileSources.add(new File(path));
     }
 
     /**
      * Метод, добавляющий несколько файлов в список исходников. Использует ввод с консоли. Валидация присутствует.
      */
-    public void correctFileSources(){
+    public void correctFileSources() {
         System.out.println("Enter the file paths, enter an empty line if you are finished.");
         String path;
-        do{
+        do {
             System.out.println("Enter file path: ");
-            path=this.scanner.nextLine();
-            while(!checkFile(path)&&!path.isEmpty()){
+            path = this.scanner.nextLine();
+            while (!checkFile(path) && !path.isEmpty()) {
                 System.out.println("Previous path was incorrect, enter the correct path or empty line:");
                 path = this.scanner.nextLine().trim();
             }
-            if(path.isEmpty())break;
+            if (path.isEmpty()) break;
             else fileSources.add(new File(path));
-        }while(true);
+        } while (true);
 
     }
 
@@ -360,23 +368,26 @@ public class Utility {
             }
         }
         collectData(stringsList);
-        printStatistics(this.statisticsType);
+        if (statisticsType != null) {
+            printStatistics(this.statisticsType);
+        }
         createFiles();
     }
 
     /**
      * Метод вывода в консоль статистики по данным.
+     *
      * @param statisticsType Тип статистики.
      */
-    public void printStatistics(Command statisticsType){
-        String intStats="";
-        String floatStats="";
-        String stringStats="";
+    public void printStatistics(Command statisticsType) {
+        String intStats = "";
+        String floatStats = "";
+        String stringStats = "";
         switch (statisticsType) {
             case S -> {
-                intStats = String.valueOf(integers.size());
-                floatStats = String.valueOf(floats.size());
-                stringStats = String.valueOf(strings.size());
+                intStats = "Amount: " + integers.size();
+                floatStats = "Amount: " + floats.size();
+                stringStats = "Amount: " + strings.size();
             }
             case F -> {
                 intStats = intFullStats();
@@ -384,81 +395,84 @@ public class Utility {
                 stringStats = stringFullStats();
             }
         }
-        System.out.println("IntStats:\n"+intStats);
-        System.out.println("FloatStats:\n"+floatStats);
-        System.out.println("StringStats:\n"+stringStats);
+        System.out.println("IntStats:\n" + intStats);
+        System.out.println("FloatStats:\n" + floatStats);
+        System.out.println("StringStats:\n" + stringStats);
     }
 
     /**
      * Метод, собирающий статистику по целым числам.
+     *
      * @return Строка, содержащая статистику.
      */
-    public String intFullStats(){
-        if(!integers.isEmpty()){
+    public String intFullStats() {
+        if (!integers.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             int sum = 0;
             int max = Integer.MIN_VALUE;
             int min = Integer.MAX_VALUE;
-            for (int i:integers) {
-                sum+=i;
-                max=Math.max(i,max);
-                min=Math.min(i,min);
+            for (int i : integers) {
+                sum += i;
+                max = Math.max(i, max);
+                min = Math.min(i, min);
             }
-            int average = sum/integers.size();
+            int average = sum / integers.size();
             sb.append("min: ").append(min).append("\n")
                     .append("max: ").append(max).append("\n")
                     .append("sum: ").append(sum).append("\n")
                     .append("average: ").append(average).append("\n");
             return sb.toString();
-        }else{
+        } else {
             return null;
         }
     }
 
     /**
      * Метод, собирающий статистику по числам с плавающей запятой.
+     *
      * @return Строка, содержащая статистику.
      */
-    public String floatFullStats(){
-        if(!floats.isEmpty()){
+    public String floatFullStats() {
+        if (!floats.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             float sum = 0;
             float max = Integer.MIN_VALUE;
             float min = Integer.MAX_VALUE;
-            for (float i:floats) {
-                sum+=i;
-                max=Math.max(i,max);
-                min=Math.min(i,min);
+            for (float i : floats) {
+                sum += i;
+                max = Math.max(i, max);
+                min = Math.min(i, min);
             }
-            float average = sum/floats.size();
+            float average = sum / floats.size();
             sb.append("min: ").append(min).append("\n")
                     .append("max: ").append(max).append("\n")
                     .append("sum: ").append(sum).append("\n")
                     .append("average: ").append(average).append("\n");
             return sb.toString();
-        }else{
+        } else {
             return null;
         }
     }
 
     /**
      * Метод, собирающий статистику по строкам.
+     *
      * @return Строка, содержащая статистику.
      */
-    public String stringFullStats(){
-        if(!strings.isEmpty()){
+    public String stringFullStats() {
+        if (!strings.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             int max = Integer.MIN_VALUE;
             int min = Integer.MAX_VALUE;
-            for (String s:strings) {
+            for (String s : strings) {
                 int length = s.length();
-                max=Math.max(length,max);
-                min=Math.min(length,min);
+                max = Math.max(length, max);
+                min = Math.min(length, min);
             }
             sb.append("min: ").append(min).append("\n")
                     .append("max: ").append(max).append("\n");
             return sb.toString();
-        }else{
+        } else {
             return null;
         }
     }
@@ -466,18 +480,19 @@ public class Utility {
 
     /**
      * Метод, распределяющий данные по соответствующим спискам.
+     *
      * @param stringsList Нераспределенный список.
      */
-    public void collectData(List<String> stringsList){
+    public void collectData(List<String> stringsList) {
         for (String s : stringsList) {
-            try{
+            try {
                 int i = Integer.parseInt(s);
                 this.integers.add(i);
-            }catch (NumberFormatException e1){
-                try{
+            } catch (NumberFormatException e1) {
+                try {
                     float f = Float.parseFloat(s);
                     this.floats.add(f);
-                }catch (NumberFormatException e2){
+                } catch (NumberFormatException e2) {
                     this.strings.add(s);
                 }
             }
@@ -487,31 +502,31 @@ public class Utility {
     /**
      * Метод, организующий файлы для распределения данных.
      */
-    public void createFiles(){
-        if(!integers.isEmpty()){
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(savingPath+"/"+prefix+"integers.txt",appendingMode))){
+    public void createFiles() {
+        if (!integers.isEmpty()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(savingPath + "/" + prefix + "integers.txt", appendingMode))) {
                 for (int i : integers) {
                     writer.write(i + "\n");
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(!floats.isEmpty()){
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(savingPath+"/"+prefix+"floats.txt",appendingMode))){
+        if (!floats.isEmpty()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(savingPath + "/" + prefix + "floats.txt", appendingMode))) {
                 for (float f : floats) {
                     writer.write(f + "\n");
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if(!strings.isEmpty()){
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(savingPath+"/"+prefix+"strings.txt",appendingMode))){
+        if (!strings.isEmpty()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(savingPath + "/" + prefix + "strings.txt", appendingMode))) {
                 for (String s : strings) {
                     writer.write(s + "\n");
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

@@ -17,6 +17,7 @@ public enum Command {
 
     /**
      * Конструктор.
+     *
      * @param command Команда.
      */
     Command(String command) {
@@ -25,6 +26,7 @@ public enum Command {
 
     /**
      * Интерпретирует строку в команду, если таковая существует.
+     *
      * @param text Команда в виде строки.
      * @return Команда. Если ее не существует - возвращает null.
      */

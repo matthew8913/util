@@ -16,6 +16,7 @@ public enum ErrorCode {
 
     /**
      * Конструктор.
+     *
      * @param message Сообщение для пользователя.
      */
     ErrorCode(String message) {
@@ -24,6 +25,7 @@ public enum ErrorCode {
 
     /**
      * Геттер.
+     *
      * @return Сообщение для пользователя.
      */
     public String getMessage() {

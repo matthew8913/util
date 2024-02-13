@@ -15,7 +15,8 @@ public class CommandException extends Exception {
 
     /**
      * Конструктор. Используется, если у исключения есть детали.
-     * @param errorCode Код ошибки.
+     *
+     * @param errorCode   Код ошибки.
      * @param errorDetail Детали ошибки.
      */
     public CommandException(ErrorCode errorCode, String errorDetail) {
@@ -26,6 +27,7 @@ public class CommandException extends Exception {
 
     /**
      * Конструктор.
+     *
      * @param errorCode Код ошибки.
      */
     public CommandException(ErrorCode errorCode) {
@@ -36,6 +38,7 @@ public class CommandException extends Exception {
 
     /**
      * Геттер.
+     *
      * @return Код ошибки.
      */
     public ErrorCode getErrorCode() {
@@ -44,6 +47,7 @@ public class CommandException extends Exception {
 
     /**
      * Геттер.
+     *
      * @return Детали ошибки.
      */
     public String getErrorDetail() {
@@ -52,6 +56,7 @@ public class CommandException extends Exception {
 
     /**
      * Если у исключения есть детали - выводит сообщение с деталями, если нет, то, соответственно без них.
+     *
      * @return Сообщение об ошибке.
      */
     @Override
