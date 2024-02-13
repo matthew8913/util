@@ -106,7 +106,6 @@ public class Utility {
         input = this.scanner.nextLine();
         inputStrings = Arrays.asList(input.split(" "));
         setInput(inputStrings);
-        this.scanner.close();
     }
 
     /**
@@ -147,10 +146,10 @@ public class Utility {
     }
 
     /**
-     * Метод, проверяющий отдельно взятую команду.
+     * Метод, проверяющий корректность команды и настраивающий программу по ней.
      *
-     * @param iterator Итератор используемый для просмотра строк в команде.
-     * @return Корректность отдельно взятой команды.
+     * @param iterator Итератор используемый для просмотра команд во введенной строке.
+     * @return Корректность команды.
      * @throws CommandException Если допущена ошибка в веденной команде.
      */
     public boolean setCommands(ListIterator<String> iterator) throws CommandException {
@@ -201,7 +200,7 @@ public class Utility {
     }
 
     /**
-     * Метод, проверяющий корректность пути файла из последовательности в команде.
+     * Метод, проверяющий корректность пути файла во введенной строке и устанавливающий его.
      *
      * @param iterator Итератор используемый для просмотра строк в команде.
      * @return Корректен/не корректен путь.
