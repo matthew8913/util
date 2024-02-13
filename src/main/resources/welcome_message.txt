@@ -1,0 +1,18 @@
+
+This utility processes several commands:
+
+-f: Complete file statistics
+-s: Standard file statistics
+-o some\path: Select the save path
+-p prefix_: Setting the prefix for output file names
+-a: Mode for adding data to files
+
+It is necessary to observe the command structure:
+First, the commands are separated by a space in any order. Then, the paths of the source files are also separated by a space.
+
+An example of a valid command:
+-f -o some\path -a -p prefix_ some\path\file1.txt some\path\file2.txt
+
+It is also worth noting that if the commands are duplicated, the last one entered will be used:
+-f -s -o some\path1 -o some\path2 -a -p prefix_ some\path\file1.txt
+With this command, standard statistics will be displayed, and the files will be saved in some\path2.

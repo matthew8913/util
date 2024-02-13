@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+apply plugin: 'java'
+
+group 'ru.cft'
+version '1.0-SNAPSHOT'
+
+jar {
+    archiveFileName='util.jar'
+    manifest {
+        attributes 'Main-Class': 'ru.cft.util.Main'
+    }
+}
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+test {
+    useJUnitPlatform()
+}
