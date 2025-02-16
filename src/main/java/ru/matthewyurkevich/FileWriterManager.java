@@ -20,9 +20,8 @@ public class FileWriterManager implements AutoCloseable {
             }
             intWriter.write(str + "\n");
         } catch (IOException e) {
-            System.err.println("Ошибка при создании/записи файла: " + e.getMessage());
+            System.err.println("Ошибка при записи в файл integers.txt: " + e.getMessage());
         }
-
     }
 
     public void writeToFloatFile(String str) {
@@ -32,7 +31,7 @@ public class FileWriterManager implements AutoCloseable {
             }
             floatWriter.write(str + "\n");
         } catch (IOException e) {
-            System.err.println("Ошибка при создании/записи файла: " + e.getMessage());
+            System.err.println("Ошибка при записи в файл floats.txt: " + e.getMessage());
         }
     }
 
@@ -43,21 +42,24 @@ public class FileWriterManager implements AutoCloseable {
             }
             stringWriter.write(str + "\n");
         } catch (IOException e) {
-            System.err.println("Ошибка при создании/записи файла: " + e.getMessage());
+            System.err.println("Ошибка при записи в файл strings.txt: " + e.getMessage());
         }
     }
 
-
     @Override
     public void close() throws IOException {
-        if (intWriter != null) {
-            intWriter.close();
-        }
-        if (floatWriter != null) {
-            floatWriter.close();
-        }
-        if (stringWriter != null) {
-            stringWriter.close();
+        try {
+            if (intWriter != null) {
+                intWriter.close();
+            }
+            if (floatWriter != null) {
+                floatWriter.close();
+            }
+            if (stringWriter != null) {
+                stringWriter.close();
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при закрытии ресурсов: " + e.getMessage());
         }
     }
 }

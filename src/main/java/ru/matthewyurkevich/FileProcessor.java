@@ -17,35 +17,45 @@ public class FileProcessor {
         this.writerManager = new FileWriterManager(config);
     }
 
-    public void processFiles() throws IOException {
+    public void processFiles() {
         List<File> inputFiles = config.getInputFiles();
         for (File file : inputFiles) {
-            processFile(file);
+            try {
+                processFile(file);
+            } catch (IOException e) {
+                System.err.println("Ошибка при обработке файла: " + file.getName() + ". Пропускаем файл.");
+            }
         }
-        writerManager.close();
+        try {
+            writerManager.close();
+        } catch (IOException e) {
+            System.err.println("Ошибка при закрытии ресурсов: " + e.getMessage());
+        }
     }
 
-    private void processFile(File file) {
+    private void processFile(File file) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 processLine(line);
             }
-        } catch (IOException e) {
-            System.err.println("Error reading file: " + file.getName());
         }
     }
 
-    private void processLine(String line){
-        if (isInteger(line)) {
-            statisticsCollector.collectInteger(line);
-            writerManager.writeToIntFile(line);
-        } else if (isFloat(line)) {
-            statisticsCollector.collectFloat(line);
-            writerManager.writeToFloatFile(line);
-        } else {
-            statisticsCollector.collectString(line);
-            writerManager.writeToStringFile(line);
+    private void processLine(String line) {
+        try {
+            if (isInteger(line)) {
+                statisticsCollector.collectInteger(line);
+                writerManager.writeToIntFile(line);
+            } else if (isFloat(line)) {
+                statisticsCollector.collectFloat(line);
+                writerManager.writeToFloatFile(line);
+            } else {
+                statisticsCollector.collectString(line);
+                writerManager.writeToStringFile(line);
+            }
+        } catch (Exception e) {
+            System.err.println("Ошибка при обработке строки: " + line + ". Пропускаем строку.");
         }
     }
 

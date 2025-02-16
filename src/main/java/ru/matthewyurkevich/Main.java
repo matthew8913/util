@@ -9,10 +9,8 @@ public class Main {
             FileProcessor processor = new FileProcessor(config);
             processor.processFiles();
             processor.printStatistics();
-        } catch (IllegalArgumentException e) {
-            System.err.println("Некорректный аргумент командной строки: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Ошибка при закрытии ресурсов: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Ошибка: " + e.getMessage());
         }
     }
 }

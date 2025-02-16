@@ -3,17 +3,23 @@ package ru.matthewyurkevich;
 import java.io.File;
 
 public class CommandLineParser {
-    public AppConfig parseArgs(String[] args) throws IllegalArgumentException {
+    public AppConfig parseArgs(String[] args) {
         AppConfig config = new AppConfig();
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
-            switch (arg) {
-                case "-o" -> setOutputPath(config, args[++i]);
-                case "-a" -> config.setAppendToFiles(true);
-                case "-p" -> config.setPrefix(args[++i]);
-                case "-s" -> config.setFullStatistics(false);
-                case "-f" -> config.setFullStatistics(true);
-                default -> addInputFile(config, arg);
+            try {
+                switch (arg) {
+                    case "-o" -> setOutputPath(config, args[++i]);
+                    case "-a" -> config.setAppendToFiles(true);
+                    case "-p" -> config.setPrefix(args[++i]);
+                    case "-s" -> config.setFullStatistics(false);
+                    case "-f" -> config.setFullStatistics(true);
+                    default -> addInputFile(config, arg);
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.println("Ошибка: " + e.getMessage() + ". Пропускаем аргумент: " + arg);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println("Ошибка: Недостаточно аргументов для флага: " + arg);
             }
         }
         return config;
@@ -22,7 +28,7 @@ public class CommandLineParser {
     private void setOutputPath(AppConfig config, String path) {
         File dir = new File(path);
         if (dir.exists() && dir.isDirectory()) {
-            config.setOutputPath(dir.getAbsolutePath()+"/");
+            config.setOutputPath(dir.getAbsolutePath() + "/");
         } else {
             throw new IllegalArgumentException("Некорректный путь для выходных данных: " + path);
         }
