@@ -4,7 +4,6 @@ plugins {
 }
 
 group = "ru.matthewyurkevich"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
