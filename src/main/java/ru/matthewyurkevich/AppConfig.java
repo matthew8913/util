@@ -10,13 +10,13 @@ public class AppConfig {
     private boolean appendToFiles;
     private String outputPath;
     private String prefix;
-    private boolean fullStatistics;
+    private Boolean fullStatistics;
 
     public AppConfig() {
         this.appendToFiles = false;
         this.prefix = "";
         this.outputPath = Paths.get(".").toAbsolutePath().normalize() + "/";
-        this.fullStatistics = false;
+        this.fullStatistics = null;
         this.inputFiles = new ArrayList<>();
     }
 
@@ -48,7 +48,7 @@ public class AppConfig {
         this.prefix = prefix;
     }
 
-    public boolean isFullStatistics() {
+    public Boolean isFullStatistics() {
         return fullStatistics;
     }
 

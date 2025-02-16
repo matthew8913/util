@@ -78,6 +78,9 @@ public class FileProcessor {
     }
 
     public void printStatistics() {
+        if(config.isFullStatistics() == null){
+            return;
+        }
         if (config.isFullStatistics()) {
             statisticsCollector.printFullStatistics();
         } else {
