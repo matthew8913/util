@@ -22,7 +22,7 @@ public class CommandLineParser {
     private void setOutputPath(AppConfig config, String path) {
         File dir = new File(path);
         if (dir.exists() && dir.isDirectory()) {
-            config.setOutputPath(dir.getAbsolutePath());
+            config.setOutputPath(dir.getAbsolutePath()+"/");
         } else {
             throw new IllegalArgumentException("Некорректный путь для выходных данных: " + path);
         }
